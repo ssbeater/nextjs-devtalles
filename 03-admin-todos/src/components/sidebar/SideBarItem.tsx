@@ -1,9 +1,8 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
-import { CiBookmarkCheck } from "react-icons/ci";
 
 interface SideBarItemProps {
   title: string;

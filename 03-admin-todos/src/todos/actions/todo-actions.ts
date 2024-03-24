@@ -3,14 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { Todo } from "@prisma/client";
 import prisma from "@/lib/prisma";
+import { getUserServerSession } from "@/auth/actions/auth-actions";
 
-export const sleep = async(seconds:number = 0) => {
+export const sleep = async (seconds: number = 0) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(true);
     }, seconds * 1000);
-  })!
-}
+  })!;
+};
 
 export async function toogleTodo(id: string, complete: boolean): Promise<Todo> {
   // await sleep(3);
@@ -29,9 +30,15 @@ export async function toogleTodo(id: string, complete: boolean): Promise<Todo> {
   return updatedTodo;
 }
 
-export async function addTodo (description:string): Promise<Todo|Error> {
+export async function addTodo(description: string): Promise<Todo | Error> {
   try {
-    const todo = await prisma.todo.create({data:{description}});
+    const user = await getUserServerSession();
+    if (!user) return new Error("User not found");
+
+    const todo = await prisma.todo.create({
+      data: { description, userId: user.id },
+    });
+
     revalidatePath("/dashboard/server-todos");
     return todo;
   } catch (error) {
