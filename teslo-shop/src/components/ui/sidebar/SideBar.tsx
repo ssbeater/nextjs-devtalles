@@ -12,7 +12,6 @@ import {
   IoShirtOutline,
   IoTicketOutline,
 } from "react-icons/io5";
-
 import { useUIStore } from "@/store";
 
 export const SideBar = () => {
