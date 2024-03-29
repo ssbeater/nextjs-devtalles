@@ -15,7 +15,7 @@ export function Title({ title, subtitle, className }: Props) {
         {title}
       </h1>
       {subtitle && (
-        <h3 className="text-xl mb-5">{subtitle}</h3>
+        <h3 className="text-xl mb-5 capitalize">{subtitle}</h3>
       )}
     </div>
   );
