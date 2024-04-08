@@ -1,17 +1,18 @@
 export const revalidate = 60480;
 
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
+
 import { titleFont } from "@/config/fonts";
 import { getProductBySlug } from "@/actions";
+
 import {
   ProductMobileSlideshow,
   ProductSlideshow,
-  QuantitySelector,
-  SizeSelector,
   StockLabel,
 } from "@/components";
-import { Metadata } from "next";
-import { Product } from '../../../../interfaces/product.interface';
+
+import { AddToCart } from "./ui/AddToCart";
 
 interface Props {
   params: {
@@ -27,8 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: product?.title ?? "Product not found",
     description: product?.description ?? "",
     openGraph: {
-      images: [`/products/${product?.images[2]}`]
-    }
+      images: [`/products/${product?.images[2]}`],
+    },
   };
 }
 
@@ -66,17 +67,7 @@ export default async function ProductPage({ params }: Props) {
         </h1>
         <p className="text-lg mb-5">${product.price}</p>
 
-        {/* Size selector */}
-        <SizeSelector
-          selectedSize={product.sizes[0]}
-          availableSizes={product.sizes}
-        />
-
-        {/* Quantity selector */}
-        <QuantitySelector quantity={3} />
-
-        {/* Button */}
-        <button className="btn-primary my-5">Add to cart</button>
+        <AddToCart product={product} />
 
         {/* Description */}
         <h3 className="font-bold text-sm">Description</h3>
