@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 
 export async function getProductBySlug(slug: string) {
   try {
-    console.log("slug", slug)
     const product = await prisma.product.findFirst({
       include: {
         ProductImage: {
