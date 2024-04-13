@@ -1,94 +1,23 @@
-import Link from "next/link";
-
+import { auth } from "@/auth.config";
 import { Title } from "@/components";
+import { getCountries, getUserAddress } from "@/actions";
+import { AddressForm } from "./ui/AddressForm";
 
-export default function CheckoutAddressPage() {
+export default async function CheckoutAddressPage() {
+  const session = await auth();
+
+  if (!session?.user) {
+    return <h3 className="text-5xl">500 - There are not a session</h3>;
+  }
+
+  const countries = await getCountries();
+  const storedAddress = (await getUserAddress(session?.user?.id)) ?? undefined;
+
   return (
     <div className="flex flex-col sm:justify-center sm:items-center mb-72 px-10 sm:px-0">
       <div className="w-full  xl:w-[1000px] flex flex-col justify-center text-left">
         <Title title="Address" subtitle="Delivery address" />
-
-        <div className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2">
-          <div className="flex flex-col mb-2">
-            <label htmlFor="names">Names</label>
-            <input
-              id="names"
-              type="text"
-              className="p-2 border rounded-md bg-gray-200"
-            />
-          </div>
-
-          <div className="flex flex-col mb-2">
-            <label htmlFor="lastnames">Last names</label>
-            <input
-              id="lastnames"
-              type="text"
-              className="p-2 border rounded-md bg-gray-200"
-            />
-          </div>
-
-          <div className="flex flex-col mb-2">
-            <label htmlFor="address">Address</label>
-            <input
-              id="address"
-              type="text"
-              className="p-2 border rounded-md bg-gray-200"
-            />
-          </div>
-
-          <div className="flex flex-col mb-2">
-            <label htmlFor="address-2">Address 2 (optional)</label>
-            <input
-              id="address-2"
-              type="text"
-              className="p-2 border rounded-md bg-gray-200"
-            />
-          </div>
-
-          <div className="flex flex-col mb-2">
-            <label htmlFor="postal-code">Postal code</label>
-            <input
-              id="postal-code"
-              type="text"
-              className="p-2 border rounded-md bg-gray-200"
-            />
-          </div>
-
-          <div className="flex flex-col mb-2">
-            <label htmlFor="city">City</label>
-            <input
-              id="city"
-              type="text"
-              className="p-2 border rounded-md bg-gray-200"
-            />
-          </div>
-
-          <div className="flex flex-col mb-2">
-            <label htmlFor="country">Contry</label>
-            <select id="country" className="p-2 border rounded-md bg-gray-200">
-              <option value="">[ Seleccione ]</option>
-              <option value="COL">Colombia</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col mb-2">
-            <label htmlFor="phone">Phone</label>
-            <input
-              id="phone"
-              type="text"
-              className="p-2 border rounded-md bg-gray-200"
-            />
-          </div>
-
-          <div className="flex flex-col mb-2 sm:mt-10">
-            <Link
-              href="/checkout"
-              className="btn-primary flex w-full sm:w-1/2 justify-center "
-            >
-              Siguiente
-            </Link>
-          </div>
-        </div>
+        <AddressForm countries={countries} userStoredAddress={storedAddress} />
       </div>
     </div>
   );

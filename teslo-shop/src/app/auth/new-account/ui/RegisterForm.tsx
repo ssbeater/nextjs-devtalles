@@ -8,11 +8,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import { login, registerUser } from "@/actions";
 
-type FormInputs = {
+interface FormInputs {
   name: string;
   email: string;
   password: string;
-};
+}
 
 // email regex
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
