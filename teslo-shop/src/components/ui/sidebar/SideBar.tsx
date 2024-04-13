@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+
 import clsx from "clsx";
 import {
   IoCloseOutline,
@@ -15,9 +17,50 @@ import {
 
 import { useUIStore } from "@/store";
 import { logout } from "@/actions";
+import { SideBarItem } from "./SideBarItem";
+
+const defaultItems = [
+  {
+    title: "Profile",
+    icon: <IoPersonOutline size={30} />,
+    href: "/profile",
+  },
+  {
+    title: "Orders",
+    icon: <IoTicketOutline size={30} />,
+    href: "/orders",
+  },
+];
+
+const adminItems = [
+  {
+    title: "Products",
+    icon: <IoShirtOutline size={30} />,
+    href: "/",
+  },
+  {
+    title: "Orders",
+    icon: <IoTicketOutline size={30} />,
+    href: "/",
+  },
+  {
+    title: "Users",
+    icon: <IoPeopleOutline size={30} />,
+    href: "/",
+  },
+];
 
 export const SideBar = () => {
   const { isSideMenuOpen, closeSideMenu } = useUIStore();
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+  const isAdmin = session?.user.role === "admin";
+
+  const closeSession = () => {
+    logout();
+    closeSideMenu();
+    window.location.replace("/");
+  };
 
   return (
     <div>
@@ -57,61 +100,45 @@ export const SideBar = () => {
           />
         </div>
 
-        <Link
-          href="/profile"
-          onClick={closeSideMenu}
-          className="flex items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoPersonOutline size={30} />
-          <span className="ml-3 text-xl">Profile</span>
-        </Link>
-        <Link
-          href="/orders"
-          className="flex items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoTicketOutline size={30} />
-          <span className="ml-3 text-xl">Orders</span>
-        </Link>
-        <Link
-          href="/auth/login"
-          onClick={closeSideMenu}
-          className="flex items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogInOutline size={30} />
-          <span className="ml-3 text-xl">Log In</span>
-        </Link>
-        <button
-          onClick={() => logout()}
-          className="flex w-full items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogOutOutline size={30} />
-          <span className="ml-3 text-xl">Log Out</span>
-        </button>
+        {/* Log In Item */}
+        {!isAuthenticated && (
+          <SideBarItem
+            title="Log In"
+            href="/auth/login"
+            icon={<IoLogInOutline size={30} />}
+            closeMenu={closeSideMenu}
+          />
+        )}
+
+        {/* Default Items */}
+        {isAuthenticated && (
+          <>
+            {defaultItems.map((item) => (
+              <SideBarItem
+                key={item.title}
+                closeMenu={closeSideMenu}
+                {...item}
+              />
+            ))}
+
+            <button
+              onClick={closeSession}
+              className="flex w-full items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoLogOutOutline size={30} />
+              <span className="ml-3 text-xl">Log Out</span>
+            </button>
+          </>
+        )}
 
         {/* Separator */}
         <div className="w-full h-px bg-gray-200 my-5" />
 
-        <Link
-          href="/"
-          className="flex items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoShirtOutline size={30} />
-          <span className="ml-3 text-xl">Products</span>
-        </Link>
-        <Link
-          href="/"
-          className="flex items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoTicketOutline size={30} />
-          <span className="ml-3 text-xl">Orders</span>
-        </Link>
-        <Link
-          href="/"
-          className="flex items-center mt-2 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoPeopleOutline size={30} />
-          <span className="ml-3 text-xl">Users</span>
-        </Link>
+        {/* Admin Items */}
+        {isAdmin &&
+          adminItems.map((item) => (
+            <SideBarItem key={item.title} closeMenu={closeSideMenu} {...item} />
+          ))}
       </nav>
     </div>
   );
