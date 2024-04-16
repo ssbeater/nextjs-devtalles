@@ -1,6 +1,6 @@
 export const revalidate = 60;
 
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { getPaginatedProductsWithImages } from "@/actions";
 import { Pagination, ProductGrid, Title } from "@/components";
@@ -22,7 +22,7 @@ export default async function Home({ searchParams }: Props) {
   });
 
   if (products.length === 0) {
-    redirect("/");
+    notFound();
   }
 
   return (
