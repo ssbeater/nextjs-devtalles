@@ -15,13 +15,25 @@ export const useAddressStore = create<State>()(
         firstName: "",
         lastName: "",
         address: "",
+        address2: "",
         postalCode: "",
         city: "",
         country: "",
         phone: "",
       },
       setAddress(address) {
-        set({ address });
+        set({
+          address: {
+            firstName: address.firstName,
+            lastName: address.lastName,
+            address: address.address,
+            address2: address.address2,
+            postalCode: address.postalCode,
+            city: address.city,
+            country: address.country,
+            phone: address.phone,
+          },
+        });
       },
     }),
     {

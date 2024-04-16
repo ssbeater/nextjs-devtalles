@@ -8,6 +8,7 @@ import { useAddressStore } from "@/store";
 import { useEffect } from "react";
 import { deleteUserAddress, setUserAddress } from "@/actions";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface FormInputs {
   firstName: string;
@@ -39,6 +40,7 @@ export function AddressForm({ countries, userStoredAddress = {} }: Props) {
     },
   });
 
+  const router = useRouter();
   const { data: session } = useSession({
     required: true,
   });
@@ -50,14 +52,16 @@ export function AddressForm({ countries, userStoredAddress = {} }: Props) {
   }, [address, reset]);
 
   const onSubmit = async (data: FormInputs) => {
-    setAddress(data);
-
     const { rememberAddress, ...restAddress } = data;
+    setAddress(restAddress);
+
     if (rememberAddress) {
       await setUserAddress(restAddress, session!.user?.id);
     } else {
       await deleteUserAddress(session!.user?.id);
     }
+
+    router.replace("/checkout");
   };
 
   return (

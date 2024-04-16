@@ -10,10 +10,10 @@ export async function getUserAddress(userId: string) {
 
     if (!address) return null;
 
-    const { countryId, address2, ...rest } = address;
+    const { id: _i, userId: _u, countryId, address2, ...rest } = address;
 
     return {
-      ...address,
+      ...rest,
       address2: address2 || "",
       country: countryId,
     };
