@@ -8,8 +8,6 @@ import { redirect } from "next/dist/server/api-utils";
 export async function paypalCheckPayment(paypalTransactionId: string) {
   const authToken = await getPayPalBearerToken();
 
-  console.log({ authToken });
-
   if (!authToken)
     return { ok: false, message: "Failed to get PayPal bearer token" };
 
@@ -19,8 +17,6 @@ export async function paypalCheckPayment(paypalTransactionId: string) {
 
   const { status, purchase_units } = resp;
   const { invoice_id: orderId } = purchase_units[0];
-
-  console.log({ status, orderId });
 
   if (status !== "COMPLETED")
     return { ok: false, message: "Payment not completed" };

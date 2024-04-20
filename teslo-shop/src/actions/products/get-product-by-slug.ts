@@ -8,6 +8,7 @@ export async function getProductBySlug(slug: string) {
       include: {
         ProductImage: {
           select: {
+            id: true,
             url: true,
           },
         },

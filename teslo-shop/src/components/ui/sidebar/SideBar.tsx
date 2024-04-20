@@ -36,17 +36,17 @@ const adminItems = [
   {
     title: "Products",
     icon: <IoShirtOutline size={30} />,
-    href: "/",
+    href: "/admin/product",
   },
   {
     title: "Orders",
     icon: <IoTicketOutline size={30} />,
-    href: "/",
+    href: "/admin/orders",
   },
   {
     title: "Users",
     icon: <IoPeopleOutline size={30} />,
-    href: "/",
+    href: "/admin/users",
   },
 ];
 
@@ -133,6 +133,8 @@ export const SideBar = () => {
 
         {/* Separator */}
         <div className="w-full h-px bg-gray-200 my-5" />
+
+        {isAdmin && <span className="text-xl font-bold">Admin Options</span>}
 
         {/* Admin Items */}
         {isAdmin &&

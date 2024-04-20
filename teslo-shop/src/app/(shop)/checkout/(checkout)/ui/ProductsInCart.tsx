@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import { useCartStore } from "@/store";
 import { currencyFormat } from "../../../../../utils/currencyFormat";
+import { ProductImage } from "@/components";
 
 export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState(false);
@@ -20,13 +21,13 @@ export const ProductsInCart = () => {
     <>
       {productsInCart.map((product) => (
         <div key={`${product.slug}-${product.size}`} className="flex mb-5">
-          <Image
-            src={`/products/${product.image}`}
+          <ProductImage
+            src={product.image}
             width={100}
             height={100}
             alt={product.title}
             className="mr-5 rounded"
-            style={{ width: "100", height: "100" }}
+            // style={{ width: "100", height: "100" }}
           />
           <div>
             <span>

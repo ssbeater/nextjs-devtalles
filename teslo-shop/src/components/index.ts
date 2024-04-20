@@ -9,6 +9,7 @@ export * from "./orders/OrderStatus";
 
 export * from "./products/product-grid/ProductGrid";
 export * from "./products/product-grid/ProductGridItem";
+export * from "./products/product-image/ProductImage";
 
 export * from "./product/size-selector/SizeSelector";
 export * from "./product/quantity-selector/QuantitySelector";
