@@ -24,11 +24,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = params;
   const product = await getProductBySlug(slug);
 
+  const src = product?.images[0];
+  const localSrc = src
+    ? src.startsWith("http")
+      ? src
+      : `/products/${src}`
+    : "/imgs/placeholder.jpg";
+
   return {
     title: product?.title ?? "Product not found",
     description: product?.description ?? "",
     openGraph: {
-      images: [`/products/${product?.images[2]}`],
+      images: [localSrc],
     },
   };
 }
